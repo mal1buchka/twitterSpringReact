@@ -1,0 +1,56 @@
+/* Сбрасываем все отступы и поля */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Убираем стандартные стили для списка */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Убираем стандартные стили для ссылок */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Убираем фон и бордеры у всех форм */
+input,
+button,
+textarea,
+select {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  font: inherit;
+}
+
+/* Убираем стили у таблиц */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Убираем стандартные стили у абзацев */
+p {
+  line-height: 1.5;
+}
+
+/* Обнуляем высоту изображений и шрифтов по умолчанию */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Прочее для единообразия */
+body {
+  font-family: sans-serif;
+  line-height: 1.6;
+}
