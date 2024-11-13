@@ -16,7 +16,7 @@ export default function UserInfo() {
   useEffect(() => {
     if (!token) {
       // Перенаправляем на страницу входа, если токен отсутствует
-      window.location.href = "/login";
+      window.location.href = "/";
       return;
     }
 

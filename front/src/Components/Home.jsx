@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 import Navbar from "./Navbar";
@@ -14,8 +13,6 @@ export default function Home() {
     setActiveSection(section);
   };
 
-
-
   return (
     <Box
       display="flex"
@@ -28,6 +25,7 @@ export default function Home() {
         padding: 1,
         maxWidth: "1200px",
         margin: "0 auto",
+        borderBottom: "none",
       }}
     >
       {/* Левая секция */}
@@ -41,7 +39,7 @@ export default function Home() {
       {/* Правая секция с кнопками */}
       <Box
         className="w-full h-full lg:w-3/4 relative border-2 border-white"
-        sx={{ flex: 2 }}
+        sx={{ flex: 2, borderBottom: "none" }}
       >
         {/* Кнопки для переключения контента */}
         <div className="flex justify-between items-center mb-4 border-b-2 border-white border-solid p-2">
@@ -55,7 +53,8 @@ export default function Home() {
           >
             <p className="text-lg">Mine</p>
           </button>
-          <div className="border-l-2 border-white h-6 mx-2" /> {/* Линия между кнопками */}
+          <div className="border-l-2 border-white h-6 mx-2" />{" "}
+          {/* Линия между кнопками */}
           <button
             onClick={() => handleSectionChange("following")}
             className={`flex-1 hover:text-blue-500 transition-all duration-300 ease-in-out transform ${
@@ -76,5 +75,3 @@ export default function Home() {
     </Box>
   );
 }
-
-

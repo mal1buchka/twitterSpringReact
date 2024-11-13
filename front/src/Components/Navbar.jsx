@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     // Удаляем токен из localStorage
-    localStorage.removeItem("jwtToken");
+    localStorage.clear();
 
     // Переходим на страницу регистрации
     navigate("/register");
@@ -35,7 +35,7 @@ export default function Navbar() {
       {/* Основная навигация */}
       <nav className="w-full mb-4">
         <Link
-          to="/api/v1/home"
+          to="/home"
           className="flex items-center justify-center hover:text-blue-500 active:text-blue-700"
         >
           <img
