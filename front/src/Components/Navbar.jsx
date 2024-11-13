@@ -1,9 +1,34 @@
-import React from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import user_icon from "../assets/user.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const location = useLocation(); // Определяем текущий маршрут
+  const navigate = useNavigate(); // Хук для навигации
+
+  const handleLogout = () => {
+    // Удаляем токен из localStorage
+    localStorage.removeItem("jwtToken");
+
+    // Переходим на страницу регистрации
+    navigate("/register");
+  };
+  const token = localStorage.getItem("jwtToken");
+  console.log(token);
+  const [username, setUsername] = useState("Name here");
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token); // Декодируем токен
+        console.log(decodedToken); // Выводим для отладки
+        setUsername(decodedToken.sub || "Name here"); // Устанавливаем имя пользователя
+      } catch (error) {
+        console.error("Ошибка при декодировании токена:", error);
+      }
+    }
+  }, [token]);
 
   return (
     <div className="max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-md relative">
@@ -26,12 +51,8 @@ export default function Navbar() {
       <div className="space-y-4">
         {/* My User */}
         <Link
-          to="/api/v1/user"
-          className={`block p-2 text-lg rounded-md transition-colors ${
-            location.pathname === "/api/v1/user"
-              ? "bg-white text-black"
-              : "text-white"
-          } hover:text-blue-500`}
+          to="/user"
+          className={`block p-2 text-lg rounded-md transition-colors hover:text-blue-500`}
         >
           My User
         </Link>
@@ -90,16 +111,16 @@ export default function Navbar() {
 
         {/* Logout */}
         <div className="border-t border-gray-600"></div>
-        <Link
-          to="/api/v1/logout"
+        <button
+          onClick={handleLogout}
           className={`block p-2 text-lg rounded-md transition-colors ${
-            location.pathname === "/api/v1/logout"
+            location.pathname === "/register"
               ? "bg-white text-black"
               : "text-white"
           } hover:text-blue-500`}
         >
           Logout
-        </Link>
+        </button>
         <div className="border-t border-gray-600"></div>
         <Link
           to="/api/v1/about"
@@ -113,7 +134,7 @@ export default function Navbar() {
         </Link>
         <div className="border-t border-gray-600 flex gap-5 p-1 items-center h-20">
           <img src={user_icon} alt="user_icon" className="h-10 w-10" />
-          <p>Name of the user</p>
+          <p>Имя пользователя: {username}</p>
         </div>
       </div>
     </div>

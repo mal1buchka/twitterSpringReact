@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -56,7 +58,14 @@ public class SecurityController {
             user.setGender(signupRequestDTO.getGender());
             user.setPassword(hashed);
             userRepository.save(user);
-            return ResponseEntity.ok("Ti krasavchik");
+            String token = jwtCore.generateToken(authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            signupRequestDTO.getUsername(),
+                            signupRequestDTO.getPassword()
+                    )
+            ));
+
+            return ResponseEntity.ok(Map.of("token", token));
         }
 
         @PostMapping("/signin")
@@ -70,8 +79,8 @@ public class SecurityController {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                String jwt = jwtCore.generateToken(authentication);
-                return ResponseEntity.ok(jwt);
+                String token = jwtCore.generateToken(authentication);
+                return ResponseEntity.ok(Map.of("token", token));
 
             } catch (BadCredentialsException e) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");

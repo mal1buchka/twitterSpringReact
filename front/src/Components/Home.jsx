@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 import Navbar from "./Navbar";
@@ -12,6 +13,8 @@ export default function Home() {
   const handleSectionChange = (section) => {
     setActiveSection(section);
   };
+
+
 
   return (
     <Box

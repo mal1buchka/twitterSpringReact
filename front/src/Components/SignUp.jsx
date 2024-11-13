@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import birthDate_icon from "../assets/age.svg";
 import email_icon from "../assets/email.svg";
 import maleFemale_icon from "../assets/male-and-female.svg";
 import user_icon from "../assets/user.svg";
 import password_icon from "../assets/password.svg";
+import axios from "axios";
+
 
 export default function SignUp() {
-  // Состояние для формы
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     gender: "",
@@ -14,32 +17,58 @@ export default function SignUp() {
     username: "",
     birthDate: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [error, setError] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false); // Видимость пароля
-  const [passwordStrength, setPasswordStrength] = useState(""); // Сложность пароля
-
-  // Обновление состояния при изменении полей формы
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
 
     if (name === "password") {
-      updatePasswordStrength(value); // Проверка сложности пароля
+      updatePasswordStrength(value);
     }
   };
 
-  // Обработка отправки формы
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setError(""); // Очистка ошибок перед отправкой
+  
+    if (!formData.email || !formData.username || !formData.password || !formData.birthDate || !formData.gender) {
+      setError("Пожалуйста, заполните все поля.");
+      return;
+    }
+  
+    try {
+      // Отправка данных с помощью axios
+      const response = await axios.post("http://localhost:8080/auth/signup", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,  // Включаем отправку cookies (аналог credentials: "include")
+      });
+  
+      if (response.status === 200) {
+        console.log(response.data);
+        
+        console.log("Регистрация прошла успешно!");
+        const { token } = response.data;
+        localStorage.setItem("jwtToken", token); // Сохранение токена в localStorage
+        
+        navigate("/home"); // Переход на главную страницу
+        
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setError("Произошла ошибка, попробуйте снова");
+    }
   };
+  
 
-  // Функция для смены видимости пароля
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  // Функция для обновления сложности пароля
   const updatePasswordStrength = (password) => {
     if (password.length < 6) {
       setPasswordStrength("Слабый");
@@ -54,13 +83,14 @@ export default function SignUp() {
 
   return (
     <div className="max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-md relative">
-      <p className="text-center mb-3  text-lg font-semibold text-white">
+      <p className="text-center mb-12 mt-2 text-lg font-semibold text-white">
         Регистрация
       </p>
 
-      <div className="text-center text-gray-400 mb-2">
-        Здесь должна была быть Google Oauth,Гык
-      </div>
+      {/* Отображение ошибки */}
+      {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+
+      {/* Отображение сообщения об успехе */}
 
       <form onSubmit={handleSubmit}>
         {/* Email */}
@@ -75,7 +105,6 @@ export default function SignUp() {
               className="w-6 h-6 bg-slate-300 rounded-lg"
             />
           </div>
-
           <input
             type="email"
             id="email"
@@ -116,7 +145,7 @@ export default function SignUp() {
             </label>
             <img
               src={maleFemale_icon}
-              alt="maleFemale_cion"
+              alt="maleFemale_icon"
               className="w-6 h-6 bg-slate-300 rounded-lg"
             />
           </div>
@@ -130,11 +159,10 @@ export default function SignUp() {
             </label>
             <img
               src={user_icon}
-              alt="maleFemale_cion"
+              alt="user_icon"
               className="w-6 h-6 bg-slate-300 rounded-lg"
-            />{" "}
+            />
           </div>
-
           <input
             type="text"
             id="username"
@@ -150,20 +178,18 @@ export default function SignUp() {
         {/* Password */}
         <div className="mb-4">
           <div className="flex justify-between">
-            {" "}
             <label className="block text-gray-300 mb-1" htmlFor="password">
               Пароль
             </label>
             <img
               src={password_icon}
-              alt="pas"
+              alt="password_icon"
               className="w-6 h-6 rounded-lg bg-slate-300"
             />
           </div>
-
           <div className="relative">
             <input
-              type={showPassword ? "text" : "password"} // Переключаем тип между "text" и "password"
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               value={formData.password}
@@ -180,7 +206,6 @@ export default function SignUp() {
               {showPassword ? "Скрыть" : "Показать"}
             </button>
           </div>
-          {/* Индикатор сложности пароля */}
           <p
             className={`mt-1 text-sm ${
               passwordStrength === "Сильный"
@@ -200,9 +225,12 @@ export default function SignUp() {
             <label className="block text-gray-300 mb-1" htmlFor="birthDate">
               Дата рождения
             </label>
-            <img src={birthDate_icon} alt="birth" className="w-6 h-6 rounded-lg" />
+            <img
+              src={birthDate_icon}
+              alt="birth_icon"
+              className="w-6 h-6 rounded-lg"
+            />
           </div>
-
           <input
             type="date"
             id="birthDate"
@@ -225,3 +253,4 @@ export default function SignUp() {
     </div>
   );
 }
+

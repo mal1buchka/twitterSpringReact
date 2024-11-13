@@ -25,6 +25,6 @@ public class User {
     @Column(nullable = false)
     private Date birthDate;
 
-    @Column(nullable = false, length = 1)
+    @Column(nullable = false, length = 30)
     private String gender;
 }
