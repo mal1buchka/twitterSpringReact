@@ -14,15 +14,14 @@ public class CorsConfigurator implements WebMvcConfigurer {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        // Создаем конфигурацию CORS
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:5173");
         config.addAllowedHeader("*");
-        config.addAllowedMethod("*"); // Разрешаем все HTTP-методы (GET, POST, PUT, DELETE и т.д.)
+        config.addAllowedMethod("*");
         config.setAllowCredentials(true);
         // Применяем конфигурацию
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config); // Применяем для всех путей
+        source.registerCorsConfiguration("/**", config);
 
         return source;
     }

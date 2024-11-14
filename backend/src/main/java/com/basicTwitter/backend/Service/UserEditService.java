@@ -21,7 +21,6 @@ public class UserEditService {
                 editedUserDTO.getBirthDate(),
                 editedUserDTO.getGender()
         );
-        // После обновления возвращаем обновленного пользователя
         return userRepository.findById(editedUserDTO.getId()).orElseThrow(() -> new RuntimeException("User not found"));
     }
 

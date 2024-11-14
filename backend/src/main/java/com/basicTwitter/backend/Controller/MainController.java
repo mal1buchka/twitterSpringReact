@@ -29,11 +29,11 @@ public class MainController {
     @PatchMapping("/editUser")
     public ResponseEntity<User> editUser(@RequestBody EditedUserDTO editedUserDTO) {
         try {
-            User updatedUser = userEditService.updateUserService(editedUserDTO);  // Получаем обновленные данные
-            return ResponseEntity.ok(updatedUser);  // Возвращаем обновленного пользователя
+            User updatedUser = userEditService.updateUserService(editedUserDTO);
+            return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body(null);  // Возвращаем ошибку, если что-то пошло не так
+            return ResponseEntity.status(500).body(null);
         }
     }
 }

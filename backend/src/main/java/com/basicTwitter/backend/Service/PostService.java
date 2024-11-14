@@ -28,7 +28,7 @@ public class PostService {
         this.commentRepository = commentRepository;
     }
 
-    // Создание нового поста
+
     public Post createPost(String content) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findUserByUsername(username)
@@ -36,29 +36,27 @@ public class PostService {
 
         Post post = new Post();
         post.setContent(content);
-        post.setCreatedAt(LocalDateTime.now()); // Время создания поста
-        post.setUser(user); // Связываем пост с текущим пользователем
+        post.setCreatedAt(LocalDateTime.now());
+        post.setUser(user);
 
         return postRepository.save(post);
     }
 
-    // Получение всех постов текущего пользователя
     public List<Post> getMyPosts() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return postRepository.findByUser(user); // Возвращаем все посты пользователя
+        return postRepository.findByUser(user);
     }
 
-    // Удаление поста по ID
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         postRepository.delete(post);
     }
 
-    // Лайк поста
+
     public Post likePost(Long postId) {
         Optional<Post> postOpt = postRepository.findById(postId);
         if (postOpt.isPresent()) {
@@ -69,35 +67,29 @@ public class PostService {
         return null;
     }
 
-    // Дизлайк поста
     public Post dislikePost(Long postId) {
         Optional<Post> postOpt = postRepository.findById(postId);
         if (postOpt.isPresent()) {
             Post post = postOpt.get();
-            post.setDislikes(post.getDislikes() + 1); // Увеличиваем количество дизлайков
+            post.setDislikes(post.getDislikes() + 1);
             return postRepository.save(post);
         }
         return null;
     }
     @Transactional
-    // Добавление комментария к посту
     public Comment addComment(Long postId, String content) {
-        // Получаем текущего пользователя из контекста безопасности
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Находим пост по id
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        // Создаем новый комментарий
         Comment comment = new Comment();
         comment.setContent(content);
         comment.setPost(post);
         comment.setUser(user);
 
-        // Сохраняем комментарий в базе данных
         return commentRepository.save(comment);
     }
 }

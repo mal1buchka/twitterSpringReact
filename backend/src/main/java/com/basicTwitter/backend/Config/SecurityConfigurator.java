@@ -1,6 +1,5 @@
 package com.basicTwitter.backend.Config;
 
-import com.basicTwitter.backend.Controller.SecurityController;
 import com.basicTwitter.backend.Security.TokenFilter;
 import com.basicTwitter.backend.Service.UserService;
 import lombok.NoArgsConstructor;
@@ -26,7 +25,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 
 @Configuration
 @EnableWebSecurity
@@ -47,17 +46,16 @@ public class SecurityConfigurator {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    @Bean //блин для аутентификации
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // Удалили @Autowired здесь
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
-    @Bean
+    @Bean //безопастность всех http запросов
     public SecurityFilterChain filterChain(HttpSecurity http,@Qualifier("corsConfigurationSource") CorsConfigurationSource configurationSource) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(configurationSource))
