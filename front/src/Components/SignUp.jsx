@@ -74,7 +74,7 @@ export default function SignUp() {
       setPasswordStrength("Слабый");
     } else if (password.length < 10) {
       setPasswordStrength("Средний");
-    } else if (/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/.test(password)) {
+    } else if (/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])/.test(password)) { 
       setPasswordStrength("Сильный");
     } else {
       setPasswordStrength("Средний");

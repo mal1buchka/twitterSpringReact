@@ -13,7 +13,4 @@ public class SignupRequestDTO {
     private Date birthDate;
     private String gender;
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 }

@@ -58,7 +58,7 @@ public class SecurityConfigurator {
     @Bean //безопастность всех http запросов
     public SecurityFilterChain filterChain(HttpSecurity http,@Qualifier("corsConfigurationSource") CorsConfigurationSource configurationSource) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(configurationSource))
+                .cors(AbstractHttpConfigurer::disable) //
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))

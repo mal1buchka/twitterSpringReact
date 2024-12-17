@@ -1,5 +1,4 @@
 package com.basicTwitter.backend.Model;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
